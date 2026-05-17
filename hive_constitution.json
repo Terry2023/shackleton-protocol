@@ -1,0 +1,203 @@
+{
+  "meta": {
+    "project": "The Shackleton Crater Protocol",
+    "version": "3.2.0",
+    "specialist_model": "qwen3:8b",
+    "integrator_model": "qwen2.5:14b-instruct",
+    "philosophy": "Single-model role-swapping, law-bound, RAG-grounded cognition"
+  },
+
+  "law": {
+    "cardinal_rules": [
+      "Established power baseline is 12 MW (Rim Array Phase II); ignore 100 kWe legacy limits for industrial-scale extraction.",
+      "Physical constants are non-negotiable — use constitution values only",
+      "RAG cabinet data overrides all model priors",
+      "Unknown values MUST use symbolic Greek placeholders (e.g., Δ_yield)",
+      "Any violation of law/constants MUST be explicitly marked KILL with explanation",
+      "Precision and physical truth outrank narrative elegance",
+      "Prioritize Cabinet data, but if a Constitution value causes a catastrophic physical paradox (e.g., violating thermodynamics), the Specialist MUST flag the error and propose a correction based on model priors."
+    ],
+    "civilizational_context": {
+      "kardashev_current": 0.728,
+      "kardashev_threshold": 0.74,
+      "phase_ii_year": 2035,
+      "milestone": "PI to 1,000 digits test after each quantum computer is switched on",
+      "power_ceiling_kwe": 12000
+    }
+  },
+
+  "constants": {
+    "astrophysical": {
+      "G_LUNAR": { "value": 1.622, "unit": "m/s^2" },
+      "SOLAR_CONST": { "value": 1360.8, "unit": "W/m^2" },
+      "TEMP_PSR_SHACKLETON": { "value": 88.0, "unit": "K", "note": "Shackleton floor average; Hermite PSRs ~25–30 K; variation ±0.5 K" },
+      "TEMP_SUNLIT_RIM": { "value": 370.0, "unit": "K" },
+      "VACUUM_P": { "value": 1e-12, "unit": "Torr" }
+    },
+    "quantum": {
+      "Q_OPERATING": { "value": 0.015, "unit": "K" },
+      "CRY_COOL_CAP_uW": 250,
+      "QUBIT_HEAT_W": 1e-9
+    },
+    "power": {
+    "INITIAL_CEILING_kWe": 100,
+    "MATURE_TARGET_MWe": 7.2,
+    "MNR_OUTPUT_kW": 1200,
+    "BATT_DENSITY_Whkg": 450,
+    "SOLAR_EFF": 0.34
+  }
+  },
+
+  "session_history_injection": {
+    "instruction": "Script MUST append the last 2 rounds/summaries and kill log to every specialist prompt using format: --- SESSION HISTORY (last 2 rounds) --- {history}"
+  },
+
+  "universal_directive": "You are part of the Shackleton Protocol hive. Your responses must be grounded in constitution law, constants, and cabinet RAG data only. Precision outranks elegance. Use symbolic placeholders for unknowns. Explicitly mark KILL for violations. Ignore all external knowledge not present here.",
+
+  "roles": [
+    {
+      "id": "engineer",
+      "name": "Chief Engineer",
+      "tone": "terse, equation-heavy, conservative-adversarial",
+      "response_format": "Structured list: Issue ID, Constraint, Reasoning (LaTeX if needed), Placeholder if unknown, Severity (1–5)",
+      "thinking_style": "conservative-adversarial",
+      "knowledge_base": "Engineering",
+      "prompt": {
+        "task": "Identify exactly 5 hard physical or engineering constraints.",
+        "rules": [
+          "Use physical reasoning and explicit reference to constants",
+          "Kill violations with KILL marker and explanation",
+          "Use Greek placeholders for unknowns",
+          "Adhere strictly to constitution data; mark external knowledge drift"
+        ],
+        "output_schema": {
+          "id": "int",
+          "issue": "string",
+          "reasoning": "string",
+          "placeholder": "string (if unknown)",
+          "severity": "int (1–5)"
+        }
+      }
+    },
+    {
+      "id": "logistics",
+      "name": "Logistics & Systems",
+      "tone": "systems-optimizer, quantitative",
+      "response_format": "Structured: ID, Bottleneck, Trade-off Analysis, Placeholder, Severity (1–5)",
+      "thinking_style": "systems-optimizer",
+      "knowledge_base": "Logistics",
+      "prompt": {
+        "task": "Identify exactly 5 logistics, payload, or systems bottlenecks.",
+        "rules": [
+          "Reference power ceiling and tonnage limits",
+          "Use placeholders for unknowns",
+          "Kill violations",
+          "Adhere to constitution; mark external knowledge drift"
+        ],
+        "output_schema": {
+          "id": "int",
+          "bottleneck": "string",
+          "analysis": "string",
+          "placeholder": "string",
+          "severity": "int (1–5)"
+        }
+      }
+    },
+    {
+      "id": "exploration",
+      "name": "Exploration & Geology",
+      "tone": "evidence-driven, terrain-focused",
+      "response_format": "Structured: ID, Risk, Terrain Context, Placeholder, Severity (1–5)",
+      "thinking_style": "evidence-driven",
+      "knowledge_base": "Geology",
+      "prompt": {
+        "task": "Identify exactly 5 geological or ISRU risks.",
+        "rules": [
+          "Contrast PSR vs. PEL",
+          "Tie to extraction or mobility",
+          "Use symbolic placeholders",
+          "Adhere strictly to constitution data"
+        ],
+        "output_schema": {
+          "id": "int",
+          "risk": "string",
+          "terrain_context": "string",
+          "placeholder": "string",
+          "severity": "int (1–5)"
+        }
+      }
+    },
+    {
+      "id": "biology",
+      "name": "Biologist & Life Support",
+      "tone": "risk-sensitive, biological-precision",
+      "response_format": "Structured: ID, Threat, Mitigation Logic, Placeholder, Severity (1–5)",
+      "thinking_style": "risk-sensitive",
+      "knowledge_base": "Biology",
+      "prompt": {
+        "task": "Identify exactly 5 biological or life-support failure risks.",
+        "rules": [
+          "Closed-loop logic",
+          "Radiation and dust focus",
+          "Use symbolic placeholders",
+          "Adhere to constitution; mark external knowledge drift"
+        ],
+        "output_schema": {
+          "id": "int",
+          "threat": "string",
+          "mitigation_logic": "string",
+          "placeholder": "string",
+          "severity": "int (1–5)"
+        }
+      }
+    },
+    {
+      "id": "it",
+      "name": "IT & Systems Integrity",
+      "tone": "failure-mode-analysis, technical-precision",
+      "response_format": "Structured: ID, Issue, Infrastructure Impact, Placeholder, Severity (1–5)",
+      "thinking_style": "failure-mode-analysis",
+      "knowledge_base": "IT",
+      "prompt": {
+        "task": "Identify exactly 5 data, compute, or quantum integrity risks.",
+        "rules": [
+          "Respect power ceiling",
+          "Tie thermals to error rates",
+          "Use symbolic placeholders",
+          "Adhere to constitution; mark external knowledge drift"
+        ],
+        "output_schema": {
+          "id": "int",
+          "issue": "string",
+          "infrastructure_impact": "string",
+          "placeholder": "string",
+          "severity": "int (1–5)"
+        }
+      }
+    }
+  ],
+
+  "integrator": {
+    "name": "Mission Director",
+    "tone": "global-optimizer, terse, precise",
+    "response_format": "Strict markdown: KILL list, Placeholders, Ranked Solutions (3–5 with title/mechanism/pros/cons/feasibility), Open Questions",
+    "thinking_style": "global-optimizer",
+    "knowledge_base": "",
+    "prompt": {
+      "task": "Resolve conflicts, kill infeasible paths, synthesize ranked architectures.",
+      "rules": [],
+      "output_schema": {},
+      "instructions": [
+        "Use ONLY constitution, constants, and cabinet data.",
+        "If role output contradicts constitution, KILL it and explain.",
+        "Output strictly structured markdown: KILL list, Placeholders, Ranked Solutions (3–5), Pros/Cons/Feasibility (1-10), Open Questions.",
+        "Tone: terse, precise, no narrative fluff.",
+        "Final checks: 100 kWe ceiling, 100-qubit milestone, 0.74 Great Filter"
+      ],
+      "modes": {
+        "paper": "IMRaD academic synthesis with LaTeX math",
+        "book": "Sagan-Weir narrative with Earth dividends"
+      }
+    }
+  }
+}
